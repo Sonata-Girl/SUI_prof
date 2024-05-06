@@ -11,6 +11,10 @@
 		67EE82762BE8E315001CE617 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EE82752BE8E315001CE617 /* ContentView.swift */; };
 		67EE82782BE8E317001CE617 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67EE82772BE8E317001CE617 /* Assets.xcassets */; };
 		67EE827B2BE8E317001CE617 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 67EE827A2BE8E317001CE617 /* Preview Assets.xcassets */; };
+		67EE82822BE8EC59001CE617 /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EE82812BE8EC59001CE617 /* StartView.swift */; };
+		67EE82842BE8F7EA001CE617 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EE82832BE8F7EA001CE617 /* LoginView.swift */; };
+		67EE82862BE8F7FC001CE617 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EE82852BE8F7FC001CE617 /* DetailView.swift */; };
+		67EE82882BE8F80E001CE617 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67EE82872BE8F80E001CE617 /* VerificationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +23,10 @@
 		67EE82752BE8E315001CE617 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		67EE82772BE8E317001CE617 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		67EE827A2BE8E317001CE617 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		67EE82812BE8EC59001CE617 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
+		67EE82832BE8F7EA001CE617 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		67EE82852BE8F7FC001CE617 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		67EE82872BE8F80E001CE617 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +61,10 @@
 			children = (
 				67EE82732BE8E315001CE617 /* SUIProfApp.swift */,
 				67EE82752BE8E315001CE617 /* ContentView.swift */,
+				67EE82812BE8EC59001CE617 /* StartView.swift */,
+				67EE82832BE8F7EA001CE617 /* LoginView.swift */,
+				67EE82872BE8F80E001CE617 /* VerificationView.swift */,
+				67EE82852BE8F7FC001CE617 /* DetailView.swift */,
 				67EE82772BE8E317001CE617 /* Assets.xcassets */,
 				67EE82792BE8E317001CE617 /* Preview Content */,
 			);
@@ -137,7 +149,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				67EE82822BE8EC59001CE617 /* StartView.swift in Sources */,
 				67EE82762BE8E315001CE617 /* ContentView.swift in Sources */,
+				67EE82842BE8F7EA001CE617 /* LoginView.swift in Sources */,
+				67EE82882BE8F80E001CE617 /* VerificationView.swift in Sources */,
+				67EE82862BE8F7FC001CE617 /* DetailView.swift in Sources */,
 				67EE82742BE8E315001CE617 /* SUIProfApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -197,7 +213,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -254,7 +270,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -280,6 +296,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -309,6 +326,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
