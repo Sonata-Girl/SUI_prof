@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/// Текстфилд для ввода кода верификации
 struct CodeTextFieldModifier: ViewModifier {
     func body(content: Content) -> some View {
         content

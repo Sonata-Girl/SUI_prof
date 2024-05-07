@@ -57,7 +57,6 @@ struct StartView: View {
                     startPoint: .top,
                     endPoint: .bottom
                 )
-
                 VStack {
                     Spacer()
                         .frame(height: 50)
@@ -81,7 +80,6 @@ struct StartView: View {
                     .environmentObject(
                         viewModel
                     )
-
                     .frame(width: 300, height: 55)
                     .tint(.black)
                     .background(.white)
