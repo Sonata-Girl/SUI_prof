@@ -18,6 +18,9 @@ struct StartView: View {
         static let signText = "Sign in here"
     }
 
+    @ObservedObject var viewModel = AppViewModel()
+    @State private var showingSheet = false
+
     private var asyncImageView: some View {
         AsyncImage(url: URL(string: "https://live.staticflickr.com/8073/8307198852_878d4f319b_b.jpg")) { phase in
             switch phase {
@@ -68,16 +71,17 @@ struct StartView: View {
                     Spacer()
                         .frame(height: 130)
                     Button {
-
+                        showingSheet.toggle()
                     } label: {
-                        NavigationLink {
-                            DetailView()
-                        } label: {
                             Text(Constants.getStartedTExt)
                                 .frame(maxWidth: .infinity,maxHeight: .infinity)
                                 .foregroundStyle(.linearGradient(colors: [.appGreen,.appLightGreen], startPoint: .top, endPoint: .bottom))
-                        }
                     }
+                    .fullScreenCover(isPresented: $showingSheet, content: DetailView.init)
+                    .environmentObject(
+                        viewModel
+                    )
+
                     .frame(width: 300, height: 55)
                     .tint(.black)
                     .background(.white)
@@ -92,6 +96,9 @@ struct StartView: View {
                         .padding()
                     NavigationLink {
                         LoginView()
+                            .environmentObject(
+                                viewModel
+                            )
                     } label: {
                         Text(Constants.signText)
                             .font(.bold(.custom(Constants.fontVerdana, size: 28))())

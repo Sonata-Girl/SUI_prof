@@ -17,12 +17,22 @@ struct LoginView: View {
         static let signUpText = "Sign up"
         static let forgotPasswordText = "Forgot your password?"
         static let checkText = "Check Verification"
+        static let passwordIsShortText = "Пароль должен содержать от 6 до 15 символов."
+    }
+
+    private enum TextFields {
+        case phone
+        case password
     }
 
     @State private var phoneTextField = ""
     @State private var passwordTextField = ""
     @State private var passwordIsShow = false
+    @State private var passwordIsShortAlert = false
     @State private var supportPhoneShowOn = false
+    @FocusState private var currentTextField: TextFields?
+    @EnvironmentObject var viewModel: AppViewModel
+    @State private var showingSheet = false
 
     var body: some View {
         VStack {
@@ -46,6 +56,7 @@ struct LoginView: View {
             }
             NavigationLink {
                 LoginView()
+                    .environmentObject(viewModel)
             } label: {
                 Text(Constants.checkText)
                     .font(.bold(.custom(Constants.fontVerdana, size: 20))())
@@ -59,6 +70,9 @@ struct LoginView: View {
             Spacer()
         }
         .background(.clear)
+        .onTapGesture {
+            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        }
     }
 
     private func getSegmentedView() -> some View {
@@ -85,7 +99,6 @@ struct LoginView: View {
                     bottomTrailing: 30,
                     topTrailing: 30),
                                        style: .continuous)
-//                    .stroke(Color.appLightGray)
                     .frame(width: 148, height: 51)
                     .foregroundStyle(.appLightGray)
                     .overlay(alignment: .center) {
@@ -102,11 +115,23 @@ struct LoginView: View {
 
     private func getPhonePasswordBlock() -> some View {
         VStack {
-            TextField(Constants.inputPhoneText, text: $phoneTextField.onChange(textFieldWithPhoneFormat))
-//            TextField(Constants.inputPhoneText, value: $phoneTextField, formatter: PhoneFormatter())
+            TextField(Constants.inputPhoneText, text: Binding(get: {
+                phoneTextField
+            }, set: { newValue in
+                phoneTextField = newValue
+            })).onChange(of: phoneTextField) { newValue in
+                phoneTextField = viewModel.formatPhone(phone: newValue)
+                if phoneTextField.count > 17 {
+                    currentTextField = .password
+                }
+            }
             .keyboardType(.phonePad)
             .font(.bold(.custom(Constants.fontVerdana, size: 20))())
             .padding()
+            .focused($currentTextField, equals: .phone)
+            .onSubmit {
+                currentTextField = .password
+            }
             Divider()
                 .padding(.horizontal)
                 .foregroundStyle(.appLightGray)
@@ -117,12 +142,24 @@ struct LoginView: View {
                             TextField(Constants.inputPassText, text: $passwordTextField)
                                 .font(.bold(.custom(Constants.fontVerdana, size: 20))())
                                 .padding()
-
+                                .focused($currentTextField, equals: .password)
+                                .onSubmit {
+                                    currentTextField = nil
+                                }.onChange(of: passwordTextField) { newValue in
+                                    passwordTextField = viewModel.cutString(text: newValue, maxCount: 15)
+                                }
                         } else {
                             SecureField(Constants.inputPassText, text: $passwordTextField)
                                 .textContentType(.password)
                                 .font(.bold(.custom(Constants.fontVerdana, size: 20))())
                                 .padding()
+                                .focused($currentTextField, equals: .password)
+                                .onSubmit {
+                                    currentTextField = nil
+                                }
+                                .onChange(of: passwordTextField) { newValue in
+                                    passwordTextField = viewModel.cutString(text: newValue, maxCount: 15)
+                                }
                         }
                     }.padding(.trailing, 32)
                     Button {
@@ -133,7 +170,6 @@ struct LoginView: View {
                     }
                     .padding()
             }
-
             Divider()
                 .padding(.zero)
                 .foregroundStyle(.appLightGray)
@@ -142,7 +178,11 @@ struct LoginView: View {
 
     private func getButton() -> some View {
         Button {
-
+            if passwordTextField.count < 6 {
+                passwordIsShortAlert = true
+            } else {
+                showingSheet.toggle()
+            }
         } label: {
             LinearGradient(
                 gradient: Gradient(colors: [
@@ -153,90 +193,23 @@ struct LoginView: View {
                 endPoint: .trailing
             )
             .overlay(alignment: .center) {
-                NavigationLink {
-                    DetailView()
-                } label: {
                     Text(Constants.signUpText)
                         .frame(maxWidth: .infinity,maxHeight: .infinity)
-                }
             }
         }
+        .fullScreenCover(isPresented: $showingSheet, content: DetailView.init)
+        .environmentObject(
+            viewModel
+        )
         .frame(width: 300, height: 55)
         .tint(.white)
         .background(.white)
         .font(.bold(.custom(Constants.fontVerdana, size: 20))())
         .cornerRadius(30)
         .padding()
-    }
-
-    private func textFieldWithPhoneFormat(phoneString: String) {
-        self.phoneTextField = formatPhoneNumber(phoneNumber: phoneString, removeLastDigit: phoneString.count == 1)
-
-    }
-
-    func formatPhoneNumber(phoneNumber: String, removeLastDigit: Bool) -> String {
-        var numbers: [String] = phoneNumber.replacingOccurrences(of: " ", with: "")
-            .filter { !["+", "(", ")", "-", " "].contains($0) }
-            .map { String($0) }
-        guard !(numbers.count == .zero) else { return "" }
-        if removeLastDigit {
-            numbers.removeLast()
+        .alert(isPresented: $passwordIsShortAlert) {
+            Alert(title: Text("Ошибка"), message: Text(Constants.passwordIsShortText))
         }
-
-        numbers.insert("+", at: 0)
-        switch numbers.count - 1 {
-            case 0:
-                numbers += [" (", "   ) ", "   -", "  -  "]
-            case 1:
-                numbers.insert("(", at: 2)
-                numbers += ["   ) ", "   -", "  -  "]
-            case 2:
-                numbers.insert("(", at: 2)
-                numbers += ["  ) ", "   -", "  -  "]
-            case 3:
-                numbers.insert("(", at: 2)
-                numbers += [" ) ", "   -", "  -  "]
-            case 4:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers += ["   -", "  -  "]
-            case 5:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers += ["  -", "  -  "]
-            case 6:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers += [" -", "  -  "]
-            case 7:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers.insert("-", at: 10)
-                numbers += ["  -  "]
-            case 8:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers.insert("-", at: 10)
-                numbers += [" -  "]
-            case 9:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers.insert("-", at: 10)
-                numbers.insert("-", at: 13)
-                numbers += [" "]
-            case 10:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers.insert("-", at: 10)
-                numbers.insert("-", at: 13)
-                numbers += [" "]
-            case 11:
-                numbers.insert("(", at: 2)
-                numbers.insert(") ", at: 6)
-                numbers.insert("-", at: 10)
-                numbers.insert("-", at: 13)
-            default: return phoneNumber.map { String($0) }.dropLast().joined(separator: "")
-        }
-        return numbers.joined(separator: "")
     }
+
 }

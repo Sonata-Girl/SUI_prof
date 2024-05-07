@@ -18,12 +18,15 @@ struct DetailView: View {
         static let articleText = "Article: 283564"
         static let descriptionText = "Description: A sofa in a modern style is furniture without lush ornate decor. It has a simple or even futuristic appearance and sleek design. "
         static let nothingText = "Nothing yet"
-        static let reviewText = "Review"
+        static let reviewTitleText = "Review"
         static let textButtonBuyText = "Buy now"
         static let countText = "/300"
     }
 
-   @State private var reviewText = Constants.nothingText
+    @Environment(\.dismiss) var dismiss
+    @State private var reviewText = Constants.nothingText
+    @State private var oldReviewText = Constants.nothingText
+    @EnvironmentObject var viewModel: AppViewModel
 
     var body: some View {
         VStack {
@@ -69,30 +72,39 @@ struct DetailView: View {
                         .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
                     HStack {
                         Spacer()
-                        Text(Constants.reviewText)
+                        Text(Constants.reviewTitleText)
                             .font(.bold(.custom(Constants.fontVerdana, size: 16))())
                             .foregroundStyle(.white)
                             .padding()
                         Spacer()
                     }.padding(.horizontal)
                     HStack {
-//                        if #available(iOS 16.0, *) {
+                        if #available(iOS 16.0, *) {
                             TextEditor(text: $reviewText)
                                 .font(.custom(Constants.fontVerdana, size: 16))
                                 .frame(width: 285, height: 177)
-                            //                        .foregroundStyle(.clear)
-//                                .backgroundStyle(.linearGradient(colors: [.appLightGreen, .appGreen], startPoint: .top, endPoint: .bottom))
-                                .background(.appGreen.opacity(0.5))
+                                .foregroundStyle(.white)
+                                .backgroundStyle(.linearGradient(colors: [.appLightGreen, .appGreen], startPoint: .top, endPoint: .bottom))
+                                .scrollContentBackground(.hidden)
                                 .padding(.zero)
+                                .onChange(of: reviewText) { newValue in
+                                    if newValue.count > 300 {
+                                        reviewText = oldReviewText
+                                    } else {
+                                        reviewText = newValue
+                                        oldReviewText = newValue
+                                    }
+                                }
                             Text("\(reviewText.count)\(Constants.countText)")
                                 .frame(width: 60, height: 17)
+                                .font(.custom(Constants.fontVerdana, size: 13))
                                 .foregroundStyle(.white)
                                 .padding(.zero)
-//                        }
+                        }
                     }.padding(.horizontal)
                     Spacer()
                     Button {
-                        
+                        dismiss()
                     } label: {
                         Text(Constants.textButtonBuyText)
                             .frame(maxWidth: .infinity,maxHeight: .infinity)
@@ -103,7 +115,7 @@ struct DetailView: View {
                     .frame(width: 305, height: 55, alignment: .center)
                     .clipShape(.capsule)
                 }
-            } .onTapGesture {
+            }.onTapGesture {
                 UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
             }
         }
