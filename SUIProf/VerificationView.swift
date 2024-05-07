@@ -97,13 +97,7 @@ struct VerificationView: View {
                     }
                 }
                 TextField("", text: $fourTextField)
-                .font(.custom(Constants.verdanaFont, size: 40))
-                .padding(.vertical)
-                .frame(width: 60, height: 70)
-                .keyboardType(.numberPad)
-                .textFieldStyle(.roundedBorder)
-                .foregroundStyle(.appGray)
-                .multilineTextAlignment(.center)
+                .codesTextField()
                 .focused($currentTextField, equals: .four)
                 .onSubmit {
                     currentTextField = nil
