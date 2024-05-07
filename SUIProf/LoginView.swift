@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/// Экран авторизации
 struct LoginView: View {
 
     enum Constants {
@@ -18,23 +19,28 @@ struct LoginView: View {
         static let forgotPasswordText = "Forgot your password?"
         static let checkText = "Check Verification"
         static let passwordIsShortText = "Пароль должен содержать от 6 до 15 символов."
+        static let supportPhoneTitle = "Телефон техподдержки"
+        static let supportPhoneText = "5-555-555-555"
     }
 
+    /// Типы текстфилдов
     private enum TextFields {
+        /// Для ввода телефона
         case phone
+        /// Для ввода пароля
         case password
     }
 
-    @State private var phoneTextField = ""
-    @State private var passwordTextField = ""
-    @State private var passwordIsShow = false
-    @State private var passwordIsShortAlert = false
-    @State private var supportPhoneShowOn = false
-    @FocusState private var currentTextField: TextFields?
     @EnvironmentObject var viewModel: AppViewModel
-    @State private var showingSheet = false
 
     var body: some View {
+        VStack {
+            ZStack {
+                LinearGradient(colors: [.appLightGreen, .appGreen], startPoint: .leading, endPoint: .trailing)
+            }
+        }
+        .ignoresSafeArea()
+        .frame(height: 40)
         VStack {
             getSegmentedView()
             Spacer()
@@ -48,32 +54,42 @@ struct LoginView: View {
             } label: {
                 Text(Constants.forgotPasswordText)
                     .font(.bold(.custom(Constants.fontVerdana, size: 20))())
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.appGray)
             }
             .padding(.top)
             .alert(isPresented: $supportPhoneShowOn) {
-                Alert(title: Text("Телефон техподдержки"),message: Text("5-555-555-555"))
+                Alert(title: Text(Constants.supportPhoneTitle),message: Text(Constants.supportPhoneText))
             }
             NavigationLink {
-                LoginView()
+                VerificationView()
                     .environmentObject(viewModel)
             } label: {
                 Text(Constants.checkText)
                     .font(.bold(.custom(Constants.fontVerdana, size: 20))())
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.appGray)
                     .padding(.zero)
             }
             .padding(.top)
             Divider()
                 .frame(width: 160, height: 1)
-                .foregroundStyle(.black)
+                .foregroundStyle(.appGray)
             Spacer()
         }
         .background(.clear)
         .onTapGesture {
             UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         }
+        .navigationBarBackButtonHidden()
     }
+
+    @State private var phoneTextField = ""
+    @State private var passwordTextField = ""
+    @State private var passwordIsShow = false
+    @State private var passwordIsShortAlert = false
+    @State private var supportPhoneShowOn = false
+    @FocusState private var currentTextField: TextFields?
+    @State private var showingSheet = false
+
 
     private func getSegmentedView() -> some View {
         HStack(alignment: .center) {
@@ -135,40 +151,39 @@ struct LoginView: View {
             Divider()
                 .padding(.horizontal)
                 .foregroundStyle(.appLightGray)
-
-                ZStack(alignment: .trailing) {
-                    Group {
-                        if passwordIsShow {
-                            TextField(Constants.inputPassText, text: $passwordTextField)
-                                .font(.bold(.custom(Constants.fontVerdana, size: 20))())
-                                .padding()
-                                .focused($currentTextField, equals: .password)
-                                .onSubmit {
-                                    currentTextField = nil
-                                }.onChange(of: passwordTextField) { newValue in
-                                    passwordTextField = viewModel.cutString(text: newValue, maxCount: 15)
-                                }
-                        } else {
-                            SecureField(Constants.inputPassText, text: $passwordTextField)
-                                .textContentType(.password)
-                                .font(.bold(.custom(Constants.fontVerdana, size: 20))())
-                                .padding()
-                                .focused($currentTextField, equals: .password)
-                                .onSubmit {
-                                    currentTextField = nil
-                                }
-                                .onChange(of: passwordTextField) { newValue in
-                                    passwordTextField = viewModel.cutString(text: newValue, maxCount: 15)
-                                }
-                        }
-                    }.padding(.trailing, 32)
-                    Button {
-                        passwordIsShow.toggle()
-                    } label: {
-                        Image(systemName: passwordIsShow ? "eye" : "eye.slash")
-                            .foregroundStyle(.black)
+            ZStack(alignment: .trailing) {
+                Group {
+                    if passwordIsShow {
+                        TextField(Constants.inputPassText, text: $passwordTextField)
+                            .font(.bold(.custom(Constants.fontVerdana, size: 20))())
+                            .padding()
+                            .focused($currentTextField, equals: .password)
+                            .onSubmit {
+                                currentTextField = nil
+                            }.onChange(of: passwordTextField) { newValue in
+                                passwordTextField = viewModel.cutString(text: newValue, maxCount: 15)
+                            }
+                    } else {
+                        SecureField(Constants.inputPassText, text: $passwordTextField)
+                            .textContentType(.password)
+                            .font(.bold(.custom(Constants.fontVerdana, size: 20))())
+                            .padding()
+                            .focused($currentTextField, equals: .password)
+                            .onSubmit {
+                                currentTextField = nil
+                            }
+                            .onChange(of: passwordTextField) { newValue in
+                                passwordTextField = viewModel.cutString(text: newValue, maxCount: 15)
+                            }
                     }
-                    .padding()
+                }.padding(.trailing, 32)
+                Button {
+                    passwordIsShow.toggle()
+                } label: {
+                    Image(systemName: passwordIsShow ? "eye" : "eye.slash")
+                        .foregroundStyle(.black)
+                }
+                .padding()
             }
             Divider()
                 .padding(.zero)
@@ -211,5 +226,4 @@ struct LoginView: View {
             Alert(title: Text("Ошибка"), message: Text(Constants.passwordIsShortText))
         }
     }
-
 }

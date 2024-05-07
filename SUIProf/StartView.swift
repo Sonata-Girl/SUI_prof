@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/// Стартовый экран приложения
 struct StartView: View {
 
     enum Constants {
@@ -16,13 +16,13 @@ struct StartView: View {
         static let getStartedTExt = "Get Started"
         static let questionText = "Don't have an account?"
         static let signText = "Sign in here"
+        static let imageLink = "https://live.staticflickr.com/8073/8307198852_878d4f319b_b.jpg"
     }
 
     @ObservedObject var viewModel = AppViewModel()
-    @State private var showingSheet = false
 
     private var asyncImageView: some View {
-        AsyncImage(url: URL(string: "https://live.staticflickr.com/8073/8307198852_878d4f319b_b.jpg")) { phase in
+        AsyncImage(url: URL(string: Constants.imageLink)) { phase in
             switch phase {
                 case .empty:
                     ProgressView()
@@ -114,4 +114,6 @@ struct StartView: View {
             }.ignoresSafeArea()
         }
     }
+
+    @State private var showingSheet = false
 }

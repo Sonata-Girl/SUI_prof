@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+/// Детальный экран товара
 struct DetailView: View {
 
     enum Constants {
@@ -24,8 +24,6 @@ struct DetailView: View {
     }
 
     @Environment(\.dismiss) var dismiss
-    @State private var reviewText = Constants.nothingText
-    @State private var oldReviewText = Constants.nothingText
     @EnvironmentObject var viewModel: AppViewModel
 
     var body: some View {
@@ -62,14 +60,13 @@ struct DetailView: View {
                         Text(Constants.articleText)
                             .font(.bold(.custom(Constants.fontVerdana, size: 16))())
                             .foregroundStyle(.white)
-                            .padding(EdgeInsets(top: 30, leading: 20, bottom: 5, trailing: 20))
+                            .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
                         Spacer()
                     }
                     Text(Constants.descriptionText)
                         .font(.custom(Constants.fontVerdana, size: 16))
                         .foregroundStyle(.white)
-
-                        .padding(EdgeInsets(top: 5, leading: 20, bottom: 5, trailing: 20))
+                        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
                     HStack {
                         Spacer()
                         Text(Constants.reviewTitleText)
@@ -120,5 +117,8 @@ struct DetailView: View {
             }
         }
     }
+
+    @State private var reviewText = Constants.nothingText
+    @State private var oldReviewText = Constants.nothingText
 }
 
