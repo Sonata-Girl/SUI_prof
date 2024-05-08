@@ -29,22 +29,26 @@ struct DetailView: View {
     var body: some View {
         VStack {
             HStack {
-                Text(Constants.titleText)
+                Text(viewModel.getCurrentGood().goodName)
                     .font(.bold(.custom(Constants.fontVerdanaBold, size: 20))())
                     .padding()
                 Spacer()
                 Image(systemName: "heart")
                     .padding()
             }
-            Image(Constants.imageName)
+            Image(viewModel.getCurrentGood().imageName)
             HStack{
                 Spacer()
                 if #available(iOS 16.0, *) {
-                    UnevenRoundedRectangle(topLeadingRadius: 10, bottomLeadingRadius: 10, bottomTrailingRadius: 0, topTrailingRadius: 0, style: .continuous)
+                    UnevenRoundedRectangle(topLeadingRadius: 10, 
+                                           bottomLeadingRadius: 10,
+                                           bottomTrailingRadius: 0,
+                                           topTrailingRadius: 0,
+                                           style: .continuous)
                         .frame(width: 191, height: 44)
                         .foregroundStyle(.appLightBrown)
                         .overlay(alignment: .center) {
-                            Text(Constants.price)
+                            Text("\(viewModel.getCurrentGood().price)$")
                                 .font(.custom(Constants.fontVerdanaBold, size: 20))
                         }
                 } else {

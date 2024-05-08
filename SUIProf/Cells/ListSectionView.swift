@@ -31,8 +31,6 @@ struct ListSectionView: View {
                 }
             }
             .frame(height: 35)
-//            Divider()
-//                .frame(width: 268, height: 1)
         }
     }
 }

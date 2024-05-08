@@ -76,10 +76,8 @@ struct StartView: View {
                                 .frame(maxWidth: .infinity,maxHeight: .infinity)
                                 .foregroundStyle(.linearGradient(colors: [.appGreen,.appLightGreen], startPoint: .top, endPoint: .bottom))
                     }
-                    .fullScreenCover(isPresented: $showingSheet, content: DetailView.init)
-                    .environmentObject(
-                        viewModel
-                    )
+                    .fullScreenCover(isPresented: $showingSheet, content: MainTabBarView.init)
+                    .environmentObject(viewModel)
                     .frame(width: 300, height: 55)
                     .tint(.black)
                     .background(.white)
