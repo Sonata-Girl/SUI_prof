@@ -72,6 +72,7 @@
 		676673782BEBC75500BA55C6 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				67EE82752BE8E315001CE617 /* ContentView.swift */,
 				67EE82812BE8EC59001CE617 /* StartView.swift */,
 				676673792BEBD4D700BA55C6 /* MainTabBarView.swift */,
 				67EE82832BE8F7EA001CE617 /* LoginView.swift */,
@@ -104,7 +105,6 @@
 			isa = PBXGroup;
 			children = (
 				67EE82732BE8E315001CE617 /* SUIProfApp.swift */,
-				67EE82752BE8E315001CE617 /* ContentView.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
