@@ -11,6 +11,18 @@ final class AppViewModel: ObservableObject {
 
     @Published var goods: [Good] = []
     @Published var currentIndexGood: Int?
+    @Published var sourceTypes: [String] = [
+        "filterBed",
+        "filterSofa",
+        "filterChair"
+    ]
+
+    @Published var sourceColors: [Color] = [
+        .white, .black, .gray, .purple, .orange,
+        .red, .green, .blue, .pink, .yellow,
+        .brown, .cyan, .indigo, .mint, .teal,
+        .red, .green, .blue, .pink, .yellow,
+    ]
 
     init() {
         fillGoods()

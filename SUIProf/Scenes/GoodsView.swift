@@ -20,22 +20,30 @@ struct GoodsView: View {
 
     @EnvironmentObject var viewModel: AppViewModel
     @State private var searchText = ""
+    @State private var showScreen = false
 
     var body: some View {
-        VStack {
-            getNavigationBar()
-            getPriceWindow()
-            ScrollView {
-                ForEach(viewModel.goods.indices, id: \.self) { goodIndex in
-                    GoodCellView(good: viewModel.goods[goodIndex],
-                                 indexGood: goodIndex)
-                    .environmentObject(viewModel)
+        if #available(iOS 16.0, *) {
+            NavigationStack {
+                VStack {
+                    getNavigationBar()
+                    getPriceWindow()
+                    ScrollView {
+                        ForEach(viewModel.goods.indices, id: \.self) { goodIndex in
+                            GoodCellView(good: viewModel.goods[goodIndex],
+                                         indexGood: goodIndex)
+                            .environmentObject(viewModel)
+                        }
+                    }
+                    .padding(.top)
+                    if viewModel.goods.count == 0 {
+                        Spacer()
+                    }
                 }
             }
-            .padding(.top)
-            if viewModel.goods.count == 0 {
-                Spacer()
-            }
+            .navigationBarBackButtonHidden(true)
+        } else {
+            // Fallback on earlier versions
         }
     }
 
@@ -62,11 +70,16 @@ struct GoodsView: View {
                             .frame(width: 312, height: 48)
                             .padding(.leading)
                         Button(action: {
-
+                            self.showScreen = true
                         }, label: {
                             Image(Constants.filterImageName)
                                 .padding(.trailing)
                         })
+                        NavigationLink(
+                            destination: FiltersView().environmentObject(viewModel),
+                            isActive: $showScreen
+                        ) {
+                        }
                     }
                     .padding(.vertical)
                 }

@@ -11,7 +11,7 @@ struct ContentView: View {
     @ObservedObject var viewModel = AppViewModel()
 
     var body: some View {
-//        StartView()
+        StartView()
 //        ProfileView()
 //        GoodCellView(good: Binding(get: {
 //            Good(imageName: "thirdGood", goodName: "Bed", price: 1000, oldPrice: 2000, count: 0)
@@ -20,7 +20,8 @@ struct ContentView: View {
 //        }))
 //        GoodsView()
 //            .environmentObject(viewModel)
-        FiltersView()
+//        FiltersView()
+//            .environmentObject(viewModel)
     }
 }
 
@@ -39,6 +40,7 @@ struct FiltersView: View {
         static let verdanaFont = "Verdana"
         static let arrowRightImageName = "chevron.right"
         static let barBackButtonImage = "chevron.left"
+        static let minPriceText = "500$"
     }
 
     let columnsTypeFilters: [GridItem] = [
@@ -53,29 +55,10 @@ struct FiltersView: View {
         .init(.flexible()),
     ]
 
-    let sourceTypes: [String] = [
-        "filterBed",
-        "filterSofa",
-        "filterChair"
-    ]
-
-    let sourceColors: [Color] = [
-        .white,
-        .black,
-        .gray,
-        .purple,
-        .orange,
-        .red,
-        .green,
-        .blue,
-        .pink,
-        .yellow,
-    ]
-
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var viewModel: AppViewModel
     @State private var colorTitle: String = Constants.colorText
-    @State private var price: Int = 0
+    @State private var price: Float = 0
 
     var body: some View {
         VStack {
@@ -95,10 +78,10 @@ struct FiltersView: View {
             }
             ScrollView(.horizontal) {
                 LazyHGrid(rows: columnsTypeFilters) {
-                    ForEach(sourceTypes.indices, id: \.self) { indexImage in
+                    ForEach(viewModel.sourceTypes.indices, id: \.self) { indexImage in
                         RoundedRectangle(cornerSize: CGSize(width: 10, height: 10))
                             .overlay {
-                                Image(sourceTypes[indexImage])
+                                Image(viewModel.sourceTypes[indexImage])
                             }
                             .frame(width: 120, height: 80)
                             .foregroundStyle(.appLightGray3)
@@ -115,21 +98,49 @@ struct FiltersView: View {
                     .padding(.horizontal)
                 Spacer()
             }
-            Slider(value: Binding(
-                get: { Double(self.price) },
-                set: { newValue in
-//                    self.viewModel.setNewCarSettings(
-//                        oldValue: self.setCar,
-//                        value: Int(newValue)
-//                    )
-                    self.price = Int(newValue)
+
+            Slider(value: $price, in: Float(500)...Float(5000), step: 500)
+                .padding(.horizontal)
+//                .tint(.green)
+//                .colorMultiply(.gray)
+//                get: { Double(self.price) },
+//                set: { newValue in
+////                    self.viewModel.setNewCarSettings(
+////                        oldValue: self.setCar,
+////                        value: Int(newValue)
+////                    )
+//                    self.price = Int(newValue)
+//                }
+//            ), in: 500...5000, step: 500) {
+//                Text(String(price))
+//            } onEditingChanged: { newValue in
+//                print(newValue)
+            //            }
+//                .overlay(GeometryReader { gp in
+//                    Text("\(Int(price))$").foregroundStyle(.appGray)
+//                        .frame(maxWidth: .infinity, alignment: .leading)
+//                        .font(.custom(Constants.verdanaFont, size: 15))
+//                        .offset(x: -30, y: 50)
+//                        .alignmentGuide(HorizontalAlignment.leading) { $0[HorizontalAlignment.leading] - (gp.size.width - $0.width) * price / (Float(5000) - Float(500))
+//                        }
+
+//                }, alignment: .bottom)
+                .onAppear {
+                    UISlider.appearance().setThumbImage(UIImage(named: "circle"), for: .normal)
                 }
-            ), in: 500...5000, step: 500) {
-                Text(String(price))
-            } onEditingChanged: { newValue in
-                print(newValue)
+            HStack {
+                Text(Constants.minPriceText)
+                    .font(.custom(Constants.verdanaFont, size: 15))
+                    .foregroundStyle(.appGray)
+                    .padding(.horizontal)
+                Spacer()
+                Text("\(Int(price))$")
+                    .font(.custom(Constants.verdanaFont, size: 15))
+                    .foregroundStyle(.appGray)
+                    .padding(.horizontal)
             }
-            .padding(.horizontal)
+
+//            .padding(.horizontal)
             HStack {
                 Text(colorTitle)
                     .font(.bold(.custom(Constants.verdanaFont, size: 24))())
@@ -139,13 +150,13 @@ struct FiltersView: View {
             }
             if #available(iOS 17.0, *) {
                 LazyVGrid(columns: columnsColorsFilters) {
-                    ForEach(sourceColors.indices, id: \.self) { indexColor in
+                    ForEach(viewModel.sourceColors.indices, id: \.self) { indexColor in
                         Circle()
                             .stroke(.black)
-                            .fill(sourceColors[indexColor])
+                            .fill(viewModel.sourceColors[indexColor])
                             .padding(.horizontal)
                             .onTapGesture {
-                                colorTitle = "Color - \(sourceColors[indexColor])"
+                                colorTitle = "Color - \(viewModel.sourceColors[indexColor])"
                             }
                     }
                 }
