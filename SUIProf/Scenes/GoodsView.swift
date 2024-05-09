@@ -19,8 +19,6 @@ struct GoodsView: View {
     }
 
     @EnvironmentObject var viewModel: AppViewModel
-    @State private var searchText = ""
-    @State private var showScreen = false
 
     var body: some View {
         if #available(iOS 16.0, *) {
@@ -88,6 +86,9 @@ struct GoodsView: View {
         .ignoresSafeArea()
         .frame(height: 90)
     }
+
+    @State private var searchText = ""
+    @State private var showScreen = false
 
     private func getPriceWindow() -> some View {
         HStack {
