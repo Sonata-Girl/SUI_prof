@@ -74,22 +74,23 @@ struct FiltersView: View {
                     .padding(.horizontal)
                 Spacer()
             }
-
-            Slider(value: $price, in: Float(500)...Float(5000), step: 500)
+            Slider(value: Binding(
+                get: { Double(self.price) },
+                set: { newValue in
+                    self.price = Int(newValue)
+                }
+            ), in: 500...5000, step: 500) {
+                Text(String(price))
+            } onEditingChanged: { newValue in
+                print(newValue)
+            }.onChange(of: price) { newValue in
+                print(newValue)
+            }
                 .padding(.horizontal)
                 .tint(.green)
                 .colorMultiply(.gray)
-            //                .overlay(GeometryReader { gp in
-            //                    Text("\(Int(price))$").foregroundStyle(.appGray)
-            //                        .frame(maxWidth: .infinity, alignment: .leading)
-            //                        .font(.custom(Constants.verdanaFont, size: 15))
-            //                        .offset(x: -30, y: 50)
-            //                        .alignmentGuide(HorizontalAlignment.leading) { $0[HorizontalAlignment.leading] - (gp.size.width - $0.width) * price / (Float(5000) - Float(500))
-            //                        }
-
-            //                }, alignment: .bottom)
                 .onAppear {
-                    UISlider.appearance().setThumbImage(UIImage(named: "circle"), for: .normal)
+                    UISlider.appearance().setThumbImage(UIImage(named: "slider"), for: .normal)
                 }
             HStack {
                 Text(Constants.minPriceText)
@@ -99,11 +100,10 @@ struct FiltersView: View {
                 Spacer()
                 Text("\(Int(price))$")
                     .font(.custom(Constants.verdanaFont, size: 15))
-                    .foregroundStyle(.appGray)
+                    .foregroundStyle(price == 500 ? .clear : .appGray)
                     .padding(.horizontal)
+                    .offset(x: getOffsetPriceSlider())
             }
-
-            //            .padding(.horizontal)
             HStack {
                 Text(colorTitle)
                     .font(.bold(.custom(Constants.verdanaFont, size: 24))())
@@ -142,7 +142,8 @@ struct FiltersView: View {
     }
 
     @State private var colorTitle: String = Constants.colorText
-    @State private var price: Float = 0
+    @State private var price: Int = 500
+    @State private var priceSliderColor: Color = .white
 
     private func getNavigationBar() -> some View {
         ZStack {
@@ -156,6 +157,11 @@ struct FiltersView: View {
             }
         }
         .ignoresSafeArea()
-        .frame(height: 60)
+        .frame(height: 30)
+    }
+
+    private func getOffsetPriceSlider() -> CGFloat {
+        var offset = price < 4500 ? 33 : 30
+        return -CGFloat((10 - (price/500))) * CGFloat(offset)
     }
 }
