@@ -5,7 +5,7 @@
 //  Created by Sonata Girl on 07.05.2024.
 //
 
-import SwiftUI
+import Foundation
 
 final class AppViewModel: ObservableObject {
 
@@ -15,13 +15,6 @@ final class AppViewModel: ObservableObject {
         "filterBed",
         "filterSofa",
         "filterChair"
-    ]
-
-    @Published var sourceColors: [Color] = [
-        .white, .black, .gray, .purple, .orange,
-        .red, .green, .blue, .pink, .yellow,
-        .brown, .cyan, .indigo, .mint, .teal,
-        .red, .green, .blue, .pink, .yellow,
     ]
 
     init() {

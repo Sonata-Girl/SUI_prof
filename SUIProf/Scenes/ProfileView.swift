@@ -30,33 +30,39 @@ struct ProfileView: View {
 //    @EnvironmentObject var viewModel: AppViewModel
 
     var body: some View {
-        VStack {
-            VStack {
-                ZStack {
-                    LinearGradient(colors: [.appLightGreen, .appGreen], startPoint: .leading, endPoint: .trailing)
+        if #available(iOS 16.0, *) {
+            NavigationStack {
+                VStack {
+                    VStack {
+                        ZStack {
+                            LinearGradient(colors: [.appLightGreen, .appGreen], startPoint: .leading, endPoint: .trailing)
+                        }
+                    }
+                    .ignoresSafeArea()
+                    .frame(height: 50)
+                    VStack {
+                        Image(Constants.avatarImageName)
+                        Text(Constants.yourNameText)
+                            .font(.bold(.custom(Constants.verdanaFont, size: 24))())
+                        HStack {
+                            Image(Constants.geoIconName)
+                            Text(Constants.sityText)
+                                .font(.custom(Constants.verdanaFont, size: 20))
+                        }
+                        List {
+                            ListSectionView(text: Constants.sityText, imageName: Constants.mailImageName, badgeCount: 3)
+                            ListSectionView(text: Constants.notificationText, imageName: Constants.notificationImageName, badgeCount: 4)
+                            ListSectionView(text: Constants.accountDetailsText, imageName: Constants.userImageName, badgeCount: 0)
+                            ListSectionView(text: Constants.myPurchasesDetailsText, imageName: Constants.basketImageName, badgeCount: 0)
+                            ListSectionView(text: Constants.settingsText, imageName: Constants.settingsImageName, badgeCount: 0, destination: AnyView(PaymentView()))
+                        }
+                        .listStyle(.plain)
+                        .padding(.trailing, 40)
+                    }
                 }
             }
-            .ignoresSafeArea()
-            .frame(height: 40)
-            VStack {
-                Image(Constants.avatarImageName)
-                Text(Constants.yourNameText)
-                    .font(.bold(.custom(Constants.verdanaFont, size: 24))())
-                HStack {
-                    Image(Constants.geoIconName)
-                    Text(Constants.sityText)
-                        .font(.custom(Constants.verdanaFont, size: 20))
-                }
-                List {
-                    ListSectionView(text: Constants.sityText, imageName: Constants.mailImageName, badgeCount: 3)
-                    ListSectionView(text: Constants.notificationText, imageName: Constants.notificationImageName, badgeCount: 4)
-                    ListSectionView(text: Constants.accountDetailsText, imageName: Constants.userImageName, badgeCount: 0)
-                    ListSectionView(text: Constants.myPurchasesDetailsText, imageName: Constants.basketImageName, badgeCount: 0)
-                    ListSectionView(text: Constants.settingsText, imageName: Constants.settingsImageName, badgeCount: 0)
-                }
-                .listStyle(.plain)
-                .padding(.trailing, 40)
-            }
+        } else {
+            // Fallback on earlier versions
         }
     }
 }

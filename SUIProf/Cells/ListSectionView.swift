@@ -11,14 +11,23 @@ struct ListSectionView: View {
     var text: String
     var imageName: String
     var badgeCount: Int
+    var destination: AnyView?
 
     var body: some View {
         VStack {
             HStack {
                 Image(imageName)
-                    .padding()
-                Text(text)
-                    .font(.custom("Verdana", size: 20))
+                    .padding(.leading)
+                NavigationLink {
+                    destination
+//                        .environmentObject(viewModel)
+                } label: {
+                    Text(text)
+                        .font(.custom("Verdana", size: 20))
+                        .foregroundStyle(.appGray)
+//                        .padding()
+                }
+                .padding()
                 Spacer()
                 if badgeCount > 0 {
                     ZStack {

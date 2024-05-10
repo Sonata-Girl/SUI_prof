@@ -33,6 +33,13 @@ struct FiltersView: View {
         .init(.flexible()),
     ]
 
+    var sourceColors: [Color] = [
+        .white, .black, .gray, .purple, .orange,
+        .red, .green, .blue, .pink, .yellow,
+        .brown, .cyan, .indigo, .mint, .teal,
+        .red, .green, .blue, .pink, .yellow,
+    ]
+
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var viewModel: AppViewModel
 
@@ -113,13 +120,13 @@ struct FiltersView: View {
             }
             if #available(iOS 17.0, *) {
                 LazyVGrid(columns: columnsColorsFilters) {
-                    ForEach(viewModel.sourceColors.indices, id: \.self) { indexColor in
+                    ForEach(sourceColors.indices, id: \.self) { indexColor in
                         Circle()
                             .stroke(.black)
-                            .fill(viewModel.sourceColors[indexColor])
+                            .fill(sourceColors[indexColor])
                             .padding(.horizontal)
                             .onTapGesture {
-                                colorTitle = "Color - \(viewModel.sourceColors[indexColor])"
+                                colorTitle = "Color - \(sourceColors[indexColor])"
                             }
                     }
                 }

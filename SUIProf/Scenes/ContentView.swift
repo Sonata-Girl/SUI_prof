@@ -22,6 +22,7 @@ struct ContentView: View {
 //            .environmentObject(viewModel)
 //        FiltersView()
 //            .environmentObject(viewModel)
+//        PaymentView()
     }
 }
 
