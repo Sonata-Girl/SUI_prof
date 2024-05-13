@@ -32,11 +32,6 @@ struct PaymentView: View {
 
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var viewModel: AppViewModel
-    @State var cardNumber: String = Constants.cardNumber
-    @State var nameCardholder: String = Constants.nameText
-    @State var year: String = ""
-    @State var month: String = ""
-    @State var dateCard: String = ""
 
     var body: some View {
         VStack {
@@ -70,7 +65,7 @@ struct PaymentView: View {
                 CardView(cardNumber: $cardNumber, nameText: $nameCardholder)
                     .modifier(FlipOpacity(percentage: showBackCard ? 0 : 1))
                     .rotation3DEffect(Angle.degrees(showBackCard ? 180 : 360), axis: (0,1,0))
-                BackCardView(cardNumber: $cardNumber, cvcNumber: $cvcTextField, date: $dateCard)
+                BackCardView(cardNumber: $newCardNumberTextField, cvcNumber: $cvcTextField, date: $dateCard)
                     .modifier(FlipOpacity(percentage: showBackCard ? 1 : 0))
                     .rotation3DEffect(Angle.degrees(showBackCard ? 0 : 180), axis: (0,1,0))
             }
@@ -135,7 +130,7 @@ struct PaymentView: View {
                         .onChange(of: dateSelection) { newValue in
                             dateSelection = newValue
                             month = String(dateSelection)
-                            dateCard = "\(month) \(year)"
+                            dateCard = "\(month)/\(year)"
                         }
                     }
                     Divider()
@@ -155,7 +150,7 @@ struct PaymentView: View {
                         .pickerStyle(.menu)
                         .onChange(of: yearSelection) { newValue in
                             yearSelection = newValue
-                            year = String(yearSelection)
+                            year = String(24 + yearSelection)
                             dateCard = "\(month)/\(year)"
                         }
                     }
@@ -184,8 +179,12 @@ struct PaymentView: View {
     @State private var showBackCard = false
     @State private var yearSelection = 0
     @State private var dateSelection = 0
-    private let years = [2024, 2023, 2022, 2021, 2020]
-    
+    @State var cardNumber: String = Constants.cardNumber
+    @State var nameCardholder: String = Constants.nameText
+    @State var year: String = ""
+    @State var month: String = ""
+    @State var dateCard: String = ""
+
     private func getTextBlock(title: String,text: String) -> some View {
         VStack(alignment: .leading) {
             HStack {

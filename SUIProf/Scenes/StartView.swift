@@ -21,15 +21,6 @@ struct StartView: View {
     }
 
     @ObservedObject var viewModel = AppViewModel()
-    @State var tapped = false
-    @State var isDevelopersShown = false
-    @State var isTextsAreShown = false
-    @State var isLabelShown = false
-    @State var isHaveAccountShow = false
-    @State var isSignShow = false
-    @State private var isLoading = false
-    @State var textButton = Constants.loadingText
-    @State var showLoginScreen = false
 
     var longTap: some Gesture {
         LongPressGesture(minimumDuration: 2)
@@ -227,4 +218,14 @@ struct StartView: View {
     }
 
     @State private var showingSheet = false
+    @State private var tapped = false
+    @State private var isDevelopersShown = false
+    @State private var isTextsAreShown = false
+    @State private var isLabelShown = false
+    @State private var isHaveAccountShow = false
+    @State private var isSignShow = false
+    @State private var isLoading = false
+    @State private var textButton = Constants.loadingText
+    @State private var showLoginScreen = false
+
 }
