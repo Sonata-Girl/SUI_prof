@@ -16,9 +16,11 @@ final class AppViewModel: ObservableObject {
         "filterSofa",
         "filterChair"
     ]
+    @Published var dates: [String] = []
 
     init() {
         fillGoods()
+        fillDates()
     }
 
     func formatPhone(phone: String) -> String {
@@ -74,5 +76,29 @@ final class AppViewModel: ObservableObject {
          Good(imageName: "fiveGood", goodName: "Wardrobe", price: 899, oldPrice: 1100, count: 0),
          Good(imageName: "sixGood", goodName: "Table", price: 600, oldPrice: 1200, count: 0)
         ]
+    }
+
+    private func fillDates() {
+        for month in 1...12 {
+            dates.append(month > 9 ? "\(month)" : "0\(month)")
+        }
+    }
+
+    /// Форматирование номера карты
+    public func formatNumber(numberCard: String) -> String {
+        let numbers = numberCard.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression)
+        var result = ""
+        var index = numbers.startIndex
+        let mask = "XXXX XXXX XXXX XXXX"
+
+        for char in mask where index < numbers.endIndex {
+            if char == "X" {
+                result.append(numbers[index])
+                index = numbers.index(after: index)
+            } else {
+                result.append(char)
+            }
+        }
+        return result
     }
 }

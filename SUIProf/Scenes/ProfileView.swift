@@ -52,9 +52,9 @@ struct ProfileView: View {
                         List {
                             ListSectionView(text: Constants.sityText, imageName: Constants.mailImageName, badgeCount: 3)
                             ListSectionView(text: Constants.notificationText, imageName: Constants.notificationImageName, badgeCount: 4)
-                            ListSectionView(text: Constants.accountDetailsText, imageName: Constants.userImageName, badgeCount: 0)
+                            ListSectionView(text: Constants.accountDetailsText, imageName: Constants.userImageName, badgeCount: 0, destination: AnyView(PaymentView()))
                             ListSectionView(text: Constants.myPurchasesDetailsText, imageName: Constants.basketImageName, badgeCount: 0)
-                            ListSectionView(text: Constants.settingsText, imageName: Constants.settingsImageName, badgeCount: 0, destination: AnyView(PaymentView()))
+                            ListSectionView(text: Constants.settingsText, imageName: Constants.settingsImageName, badgeCount: 0)
                         }
                         .listStyle(.plain)
                         .padding(.trailing, 40)

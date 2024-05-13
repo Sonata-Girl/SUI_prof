@@ -28,143 +28,203 @@ struct VerificationView: View {
         case one, two, three, four
     }
 
+    private var alertView: some View {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(.appGray)
+                .frame(width: 300, height: 130)
+                .shadow(radius: 1).foregroundStyle(.white)
+                .overlay(alignment: .top) {
+                    VStack(spacing: 20) {
+                        Text(Constants.fillSMSText)
+                            .bold()
+                            .foregroundColor(.white)
+                            .font(.custom(Constants.verdanaFont, size: 18))
+                            .padding(.top)
+                        Text("\(randomNumber)")
+                            .foregroundColor(.white)
+                            .bold()
+                            .font(.custom(Constants.verdanaFont, size: 18))
+
+                        HStack {
+                            Spacer()
+                            Button(role: .cancel) {
+                                withAnimation {
+                                    sendSmsAlertShow.toggle()
+                                }
+                            } label: {
+                                Text("Cancel")
+                                    .foregroundStyle(.white)
+                            }
+                            .foregroundStyle(.white)
+                            Spacer()
+                            Button {
+                                withAnimation {
+                                    sendSmsAlertShow.toggle()
+                                }
+                                fillTextFields()
+                            } label: {
+                                Text("Ok")
+                                    .foregroundColor(.white)
+                                    .bold()
+                                    .font(.custom(Constants.verdanaFont, size: 18))
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+                    .padding(.top, 50)
+    }
+
     @Environment(\.presentationMode) var presentation
     @EnvironmentObject var viewModel: AppViewModel
 
     var body: some View {
-        VStack {
-            ZStack {
-                LinearGradient(colors: [.appLightGreen, .appGreen], startPoint: .leading, endPoint: .trailing)
+        ZStack {
+            VStack {
                 VStack {
-                    Spacer()
-                        .frame(height: 50)
-                    Text(Constants.titleText)
-                        .foregroundStyle(.white)
+                    ZStack {
+                        LinearGradient(colors: [.appLightGreen, .appGreen], startPoint: .leading, endPoint: .trailing)
+                        VStack {
+                            Spacer()
+                                .frame(height: 50)
+                            Text(Constants.titleText)
+                                .foregroundStyle(.white)
+                                .font(.bold(.custom(Constants.verdanaFont, size: 20))())
+                        }
+                    }
+                }
+                .ignoresSafeArea()
+                .frame(height: 30)
+                Spacer()
+                VStack {
+                    Image(Constants.checkScreenImage)
+                    Text(Constants.verificationCodeText)
+                        .font(.custom(Constants.verdanaFont, size: 20))
+                        .foregroundStyle(.appGray)
+                    HStack {
+                        Spacer()
+                        TextField("", text: $oneTextField)
+                            .codesTextField()
+                            .focused($currentTextField, equals: .one)
+                            .onSubmit {
+                                currentTextField = .two
+                            }
+                            .onChange(of: oneTextField) { newValue in
+                                oneTextField = newValue
+                                if oneTextField.count == 1 {
+                                    currentTextField = .two
+                                } else {
+                                    currentTextField = nil
+                                }
+                            }
+                        TextField("", text: $twoTextField)
+                            .codesTextField()
+                            .focused($currentTextField, equals: .two)
+                            .onSubmit {
+                                currentTextField = .three
+                            }
+                            .onChange(of: twoTextField) { newValue in
+                                twoTextField = newValue
+                                if twoTextField.count == 1 {
+                                    currentTextField = .three
+                                } else {
+                                    currentTextField = .one
+                                }
+                            }
+                        TextField("", text: $threeTextField)
+                            .codesTextField()
+                            .focused($currentTextField, equals: .three)
+                            .onSubmit {
+                                currentTextField = .four
+                            }
+                            .onChange(of: threeTextField) { newValue in
+                                threeTextField = newValue
+                                if threeTextField.count == 1 {
+                                    currentTextField = .four
+                                } else {
+                                    currentTextField = .two
+                                }
+                            }
+                        TextField("", text: $fourTextField)
+                            .codesTextField()
+                            .focused($currentTextField, equals: .four)
+                            .onSubmit {
+                                currentTextField = nil
+                            }
+                            .onChange(of: fourTextField) { newValue in
+                                fourTextField = newValue
+                                if fourTextField.count == 1 {
+                                    currentTextField = nil
+                                } else {
+                                    currentTextField = .three
+                                }
+                            }
+                        Spacer()
+                    }
+                    Text(Constants.checkSMSText)
                         .font(.bold(.custom(Constants.verdanaFont, size: 20))())
+                        .foregroundStyle(.appGray)
+                    Text(Constants.messageText)
+                        .font(.custom(Constants.verdanaFont, size: 16))
+                        .foregroundStyle(.appGray)
+                    ProgressView("Loading: \(progress)/100", value: Double(progress), total: 100)
+                        .frame(width: 150)
+                        .padding(.horizontal)
+                        .foregroundStyle(.appGray)
+                        .accentColor(.appLightGreen)
+                    getButton()
+                    Text(Constants.didntReceivedSmsText)
+                        .font(.custom(Constants.verdanaFont, size: 20))
+                        .foregroundStyle(.appGray)
+                        .padding(.zero)
+                    Button(action: {
+                        randomNumber = String(Int.random(in: 1000...9999))
+                        withAnimation {
+                            sendSmsAlertShow.toggle()
+                        }
+                    }, label: {
+                        Text(Constants.sendSMSText)
+                            .font(.bold(.custom(Constants.verdanaFont, size: 20))())
+                            .foregroundStyle(.appGray)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    })
+                    //            .alert(isPresented: $sendSmsAlertShow) {
+                    //                Alert(
+                    //                    title: Text(Constants.fillSMSText),
+                    //                    message: Text(randomNumber),
+                    //                    primaryButton: .cancel(),
+                    //                    secondaryButton: .default(Text("Ok"), action: {
+                    //                        fillTextFields()
+                    //                    }))
+                    //            }
+                    //            .frame(width: 300, height: 30)
+                    //            .padding(.zero)
+                    Divider()
+                        .frame(width: 160)
+                        .foregroundStyle(.appGray)
+                    Spacer()
                 }
-            }
-        }
-        .ignoresSafeArea()
-        .frame(height: 30)
-        Spacer()
-        VStack {
-            Image(Constants.checkScreenImage)
-            Text(Constants.verificationCodeText)
-                .font(.custom(Constants.verdanaFont, size: 20))
-                .foregroundStyle(.appGray)
-            HStack {
+                .navigationBarItems(
+                    leading:
+                        Button(action: {
+                            self.presentation.wrappedValue.dismiss()
+                        }, label: {
+                            Image(systemName: Constants.barBackButtonImage)
+                                .foregroundStyle(.white)
+                        })
+                    , trailing:
+                        Text("")
+                )
+                .navigationBarBackButtonHidden(true)
+            }.blur(radius: sendSmsAlertShow ? 10 : 0)
+            if sendSmsAlertShow {
                 Spacer()
-                TextField("", text: $oneTextField)
-                .codesTextField()
-                .focused($currentTextField, equals: .one)
-                .onSubmit {
-                    currentTextField = .two
-                }
-                .onChange(of: oneTextField) { newValue in
-                    oneTextField = newValue
-                    if oneTextField.count == 1 {
-                        currentTextField = .two
-                    } else {
-                        currentTextField = nil
-                    }
-                }
-                TextField("", text: $twoTextField)
-                .codesTextField()
-                .focused($currentTextField, equals: .two)
-                .onSubmit {
-                    currentTextField = .three
-                }
-                .onChange(of: twoTextField) { newValue in
-                    twoTextField = newValue
-                    if twoTextField.count == 1 {
-                        currentTextField = .three
-                    } else {
-                        currentTextField = .one
-                    }
-                }
-                TextField("", text: $threeTextField)
-                .codesTextField()
-                .focused($currentTextField, equals: .three)
-                .onSubmit {
-                    currentTextField = .four
-                }
-                .onChange(of: threeTextField) { newValue in
-                    threeTextField = newValue
-                    if threeTextField.count == 1 {
-                        currentTextField = .four
-                    } else {
-                        currentTextField = .two
-                    }
-                }
-                TextField("", text: $fourTextField)
-                .codesTextField()
-                .focused($currentTextField, equals: .four)
-                .onSubmit {
-                    currentTextField = nil
-                }
-                .onChange(of: fourTextField) { newValue in
-                    fourTextField = newValue
-                    if fourTextField.count == 1 {
-                        currentTextField = nil
-                    } else {
-                        currentTextField = .three
-                    }
-                }
+                alertView
+                    .transition(.scale)
+                    .zIndex(1)
                 Spacer()
             }
-            Text(Constants.checkSMSText)
-                .font(.bold(.custom(Constants.verdanaFont, size: 20))())
-                .foregroundStyle(.appGray)
-            Text(Constants.messageText)
-                .font(.custom(Constants.verdanaFont, size: 16))
-                .foregroundStyle(.appGray)
-            ProgressView("Loading: \(progress)/100", value: Double(progress), total: 100)
-                .frame(width: 150)
-                .padding(.horizontal)
-                .foregroundStyle(.appGray)
-                .accentColor(.appLightGreen)
-            getButton()
-            Text(Constants.didntReceivedSmsText)
-                .font(.custom(Constants.verdanaFont, size: 20))
-                .foregroundStyle(.appGray)
-                .padding(.zero)
-            Button(action: {
-                randomNumber = String(Int.random(in: 1000...9999))
-                sendSmsAlertShow = true
-            }, label: {
-                Text(Constants.sendSMSText)
-                    .font(.bold(.custom(Constants.verdanaFont, size: 20))())
-                    .foregroundStyle(.appGray)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            })
-            .alert(isPresented: $sendSmsAlertShow) {
-                Alert(
-                    title: Text(Constants.fillSMSText),
-                    message: Text(randomNumber),
-                    primaryButton: .cancel(),
-                    secondaryButton: .default(Text("Ok"), action: {
-                        fillTextFields()
-                    }))
-            }
-            .frame(width: 300, height: 30)
-            .padding(.zero)
-            Divider()
-                .frame(width: 160)
-                .foregroundStyle(.appGray)
-            Spacer()
         }
-        .navigationBarItems(
-            leading:
-                Button(action: {
-                    self.presentation.wrappedValue.dismiss()
-                }, label: {
-                    Image(systemName: Constants.barBackButtonImage)
-                        .foregroundStyle(.white)
-                })
-             , trailing:
-                Text("")
-            )
-        .navigationBarBackButtonHidden(true)
     }
 
     @FocusState private var currentTextField: TextFields?

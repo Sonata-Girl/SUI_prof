@@ -9,12 +9,13 @@ import SwiftUI
 /// Вью отображения карты оплаты
 struct CardView: View {
 
+    @Binding var cardNumber: String
+    @Binding var nameText: String
+
     enum Constants {
         static let verdanaFont = "Verdana"
         static let mirImageName = "mir"
-        static let cardNumber = "**** **** **** 0000"
         static let cardNumberTitle = "Card number"
-        static let nameText = "Your Name"
         static let cardHolderTitle = "Cardholder"
     }
 
@@ -32,7 +33,7 @@ struct CardView: View {
                 }
                 .overlay(alignment: .bottomLeading) {
                     VStack(alignment: .leading) {
-                        Text(Constants.cardNumber)
+                        Text(cardNumber)
                             .padding(.top)
                             .padding(.leading)
                             .font(.bold(.custom(Constants.verdanaFont, size: 20))())
@@ -41,7 +42,7 @@ struct CardView: View {
                             .padding(.leading)
                             .font(.custom(Constants.verdanaFont, size: 16))
                             .foregroundStyle(.appLightGray)
-                        Text(Constants.nameText)
+                        Text(nameText)
                             .padding(.leading)
                             .font(.bold(.custom(Constants.verdanaFont, size: 20))())
                             .foregroundStyle(.white)
@@ -56,5 +57,3 @@ struct CardView: View {
         }
     }
 }
-
-

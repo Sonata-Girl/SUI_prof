@@ -168,7 +168,7 @@ struct FiltersView: View {
     }
 
     private func getOffsetPriceSlider() -> CGFloat {
-        var offset = price < 4500 ? 33 : 30
+        let offset = price < 4500 ? 33 : 30
         return -CGFloat((10 - (price/500))) * CGFloat(offset)
     }
 }

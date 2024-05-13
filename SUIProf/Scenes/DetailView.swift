@@ -25,6 +25,7 @@ struct DetailView: View {
 
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var viewModel: AppViewModel
+    @GestureState var scaleImage: CGFloat = 1
 
     var body: some View {
         VStack {
@@ -37,6 +38,13 @@ struct DetailView: View {
                     .padding()
             }
             Image(viewModel.getCurrentGood().imageName)
+                .scaleEffect(scaleImage)
+                .gesture(
+                    MagnificationGesture()
+                        .updating($scaleImage) { value, gestureState, transaction in
+                            gestureState = value.magnitudeSquared
+                        }
+                )
             HStack{
                 Spacer()
                 if #available(iOS 16.0, *) {
@@ -125,4 +133,3 @@ struct DetailView: View {
     @State private var reviewText = Constants.nothingText
     @State private var oldReviewText = Constants.nothingText
 }
-

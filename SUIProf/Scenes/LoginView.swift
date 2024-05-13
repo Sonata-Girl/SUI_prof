@@ -89,7 +89,7 @@ struct LoginView: View {
     @State private var supportPhoneShowOn = false
     @FocusState private var currentTextField: TextFields?
     @State private var showingSheet = false
-
+    @State var shakePasswordField = false
 
     private func getSegmentedView() -> some View {
         HStack(alignment: .center) {
@@ -177,6 +177,9 @@ struct LoginView: View {
                             }
                     }
                 }.padding(.trailing, 32)
+                    .offset(x: shakePasswordField ? 7 : 0)
+                    .border(shakePasswordField ? .red : .clear)
+                
                 Button {
                     passwordIsShow.toggle()
                 } label: {
@@ -194,7 +197,14 @@ struct LoginView: View {
     private func getButton() -> some View {
         Button {
             if passwordTextField.count < 6 {
-                passwordIsShortAlert = true
+                withAnimation(Animation.default.repeatCount(7).speed(5)) {
+                    shakePasswordField = true 
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    withAnimation(.linear(duration: 1).delay(0.3)) {
+                        self.shakePasswordField = false
+                    }
+                }
             } else {
                 showingSheet.toggle()
             }
